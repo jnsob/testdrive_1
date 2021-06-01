@@ -1,7 +1,8 @@
 #!/bin/bash
-mkdir test_folder11 test_folder12 test_folder13
-cd test_folder1
-touch file11.txt file12.txt file13.txt file11.json file12.json
-mkdir folder14 folder15 folder16
+mkdir test_f1 test_f2 test_f3
+cd test_f1
+touch file1.txt file2.txt file3.txt file1.json file2.json
+mkdir folder1 folder2 folder3
 ls
-mv file11.txt file12.txt ~/hometask_1/test_folder1
+mv file1.txt file2.txt folder1
+
