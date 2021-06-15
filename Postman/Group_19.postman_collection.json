@@ -120,7 +120,8 @@
 							"});\r",
 							"pm.test(\"Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
-							"});"
+							"});\r",
+							"pm.environment.set(\"name\", s.person.u_name[0]);"
 						],
 						"type": "text/javascript"
 					}
@@ -130,22 +131,40 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": ""
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "login",
+							"value": "jndef9",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "qwerty1",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
-					"raw": "{{url}}login?login=jndef9&password=qwerty1",
+					"raw": "{{url}}login",
 					"host": [
 						"{{url}}login"
 					],
 					"query": [
 						{
-							"key": "login",
-							"value": "jndef9"
+							"key": "",
+							"value": "",
+							"disabled": true
 						},
 						{
-							"key": "password",
-							"value": "qwerty1"
+							"key": "",
+							"value": "",
+							"disabled": true
 						}
 					]
 				}
@@ -155,15 +174,6 @@
 		{
 			"name": "Add user info",
 			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				},
 				{
 					"listen": "test",
 					"script": {
@@ -176,19 +186,58 @@
 							"\r",
 							"\r",
 							"var jsondata = pm.response.json();\r",
-							"var schema = {\"type\": \"object\", \r",
-							"\"person\" : {\"type\": \"object\",\r",
-							"      \"properties\": {\"u_age\": {\"type\": \"integer\"},\"additionalProperties\":false,\r",
-							"        \"u_name\": {\"type\": \"array\", \"items\": [{\"type\": \"string\"}, {\"type\": \"integer\"}, {\"type\": \"integer\"}], \"required\": [\"u_name\"], \"additionalProperties\":false,\r",
-							"        \"u_salary_1_5_year\": {\"type\":\"integer\"}},\r",
-							"      \"required\": [\"u_name\", \"u_age\", \"u_salary_1_5_year\"], \"additionalProperties\":false,\r",
-							"    \"qa_salary_after_12_months\": {\"type\": \"number\"},\r",
-							"    \"qa_salary_after_6_months\": {\"type\": \"integer\"},\r",
-							"    \"start_qa_salary\": {\"type\": \"integer\"},\r",
-							"  \"required\": [\"person\", \"qa_salary_after_12_months\", \"qa_salary_after_6_months\", \"start_qa_salary\"], \"additionalProperties\":false\r",
-							"}}}\r",
-							"pm.test(\"Validate schema\", function () { pm.expect(tv4.validate(jsondata, schema)).to.be.true});\r",
+							"var schema = {  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"person\": {\r",
+							"      \"type\": \"object\",\r",
+							"      \"properties\": {\r",
+							"        \"u_age\": {\r",
+							"          \"type\": \"integer\"\r",
+							"        },\r",
+							"        \"u_name\": {\r",
+							"          \"type\": \"array\",\r",
+							"          \"items\": [\r",
+							"            {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            {\r",
+							"              \"type\": \"integer\"\r",
+							"            },\r",
+							"            {\r",
+							"              \"type\": \"integer\"\r",
+							"            }\r",
+							"          ]\r",
+							"        },\r",
+							"        \"u_salary_1_5_year\": {\r",
+							"          \"type\": \"integer\"\r",
+							"        }\r",
+							"      },\r",
+							"      \"required\": [\r",
+							"        \"u_age\",\r",
+							"        \"u_name\",\r",
+							"        \"u_salary_1_5_year\"\r",
+							"      ]\r",
+							"    },\r",
+							"    \"qa_salary_after_12_months\": {\r",
+							"      \"type\": \"number\"\r",
+							"    },\r",
+							"    \"qa_salary_after_6_months\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"start_qa_salary\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"person\",\r",
+							"    \"qa_salary_after_12_months\",\r",
+							"    \"qa_salary_after_6_months\",\r",
+							"    \"start_qa_salary\"\r",
+							"  ]\r",
+							"}\r",
 							"\r",
+							"\r",
+							"pm.test(\"Validate schema\", function () {pm.expect(tv4.validate(jsondata, schema)).to.be.true});\r",
 							"let s = JSON.parse(responseBody);\r",
 							"\r",
 							"//pm.environment.set(\"salary\", s.start_qa_salary);\r",
@@ -204,6 +253,15 @@
 							"    pm.expect(s12m).to.eql(s.qa_salary_after_12_months);\r",
 							"   pm.expect(s18m).to.eql(pm.environment.get(\"u_salary_1_5_year\", s.u_salary_1_5_year));\r",
 							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
 							""
 						],
 						"type": "text/javascript"
@@ -230,14 +288,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}user_info?token={{token}}",
+					"raw": "{{url}}user_info?token={{auth_token}}",
 					"host": [
 						"{{url}}user_info"
 					],
 					"query": [
 						{
 							"key": "token",
-							"value": "{{token}}"
+							"value": "{{auth_token}}"
 						}
 					]
 				}
@@ -257,12 +315,36 @@
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
 							"var jsondata = pm.response.json();\r",
-							"var schema = { \"type\":\"object\",\r",
-							"    \"person\" : {\"type\": \"object\",\r",
-							"    \"properties\" : {\"age\":{\"type\":\"integer\"},\"name\":{\"type\":\"string\"},\r",
-							"         \"salary\": {\"type\":\"array\", \"items\":{\"type\":\"integer\"}, \"type\" :\"string\", \"type\":\"string\"}}, \"required\" :[\"salary\"],\r",
-							"          \r",
-							"  }, \"required\":[\"age\", \"name\", \"salary\"], \"additionalProreties\":false} //pm.test (\"Validate schema\", () => {pm.response.to.have.jsonSchema(schema);})\r",
+							"var schema = {\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"age\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"name\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"salary\": {\r",
+							"      \"type\": \"array\",\r",
+							"      \"items\": [\r",
+							"        {\r",
+							"          \"type\": \"integer\"\r",
+							"        },\r",
+							"        {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        {\r",
+							"          \"type\": \"string\"\r",
+							"        }\r",
+							"      ]\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"age\",\r",
+							"    \"name\",\r",
+							"    \"salary\"\r",
+							"  ]\r",
+							"}\r",
 							"pm.test(\"Validate schema\", () => { pm.response.to.have.jsonSchema(schema); \r",
 							"});\r",
 							"\r",
@@ -348,8 +430,29 @@
 							"pm.environment.get(\"token\")})\r",
 							"\r",
 							"let jsondata = pm.response.json();\r",
-							"let schema = {\"type\":\"object\",\r",
-							"\"person\" : {\"type\":\"object\", \"properties\":{\"age\": {\"type\" : \"integer\"}, \"daily_food\":{\"type\":\"integer\"}, \"daily_sleep\":{\"type\":\"integer\"}, \"name\":{\"type\":\"string\"} }, \"required\":[\"age\", \"daily_food\", \"daily_sleep\", \"name\"], \"additionalProperties\":false},}\r",
+							"let schema = {\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"age\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"daily_food\": {\r",
+							"      \"type\": \"number\"\r",
+							"    },\r",
+							"    \"daily_sleep\": {\r",
+							"      \"type\": \"number\"\r",
+							"    },\r",
+							"    \"name\": {\r",
+							"      \"type\": \"string\"\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"age\",\r",
+							"    \"daily_food\",\r",
+							"    \"daily_sleep\",\r",
+							"    \"name\"\r",
+							"  ]\r",
+							"}\r",
 							"pm.test (\"Check Schema\", function (){pm.response.to.have.jsonSchema(schema)})\r",
 							"\r",
 							"\r",
@@ -434,7 +537,65 @@
 							"pm.test(\"Status code is 200\", function () {pm.response.to.have.status(200)});\r",
 							"\r",
 							"let jsondata =pm.response.json();\r",
-							"let schema = {\"type\":\"object\", \"person\":{\"type\":\"object\", \"properies\":{\"age\":{\"type\":\"integer\"}, \"family\":{\"type\":\"object\", \"properies\":{\"children\":{\"type\":\"array\", \"items\" :{\"type\":\"string\", \"type\":\"integer\"}}}, \"u_salary_1_5_year\":{\"type\":\"integer\"}}}, \"name\":{\"type\":\"string\"}, \"salary\":{\"type\":\"integer\"}, \"required\":[\"age\",\"salary\",\"name\"], \"additionalProperties\":false}}\r",
+							"let schema = {\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"age\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"family\": {\r",
+							"      \"type\": \"object\",\r",
+							"      \"properties\": {\r",
+							"        \"children\": {\r",
+							"          \"type\": \"array\",\r",
+							"          \"items\": [\r",
+							"            {\r",
+							"              \"type\": \"array\",\r",
+							"              \"items\": [\r",
+							"                {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                {\r",
+							"                  \"type\": \"integer\"\r",
+							"                }\r",
+							"              ]\r",
+							"            },\r",
+							"            {\r",
+							"              \"type\": \"array\",\r",
+							"              \"items\": [\r",
+							"                {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                {\r",
+							"                  \"type\": \"integer\"\r",
+							"                }\r",
+							"              ]\r",
+							"            }\r",
+							"          ]\r",
+							"        },\r",
+							"        \"u_salary_1_5_year\": {\r",
+							"          \"type\": \"integer\"\r",
+							"        }\r",
+							"      },\r",
+							"      \"required\": [\r",
+							"        \"children\",\r",
+							"        \"u_salary_1_5_year\"\r",
+							"      ]\r",
+							"    },\r",
+							"    \"name\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"salary\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"age\",\r",
+							"    \"family\",\r",
+							"    \"name\",\r",
+							"    \"salary\"\r",
+							"  ]\r",
+							"}\r",
 							"pm.test(\"Check schema\", function(){pm.response.to.have.jsonSchema(schema)})\r",
 							"\r",
 							"\r",
@@ -556,10 +717,29 @@
 							"\r",
 							"let JsonData = pm.response.json();\r",
 							"let schema = {\r",
-							"    \"type\":\"array\", \"items\":{\r",
-							"    \"Cur_Abbreviation\":{\"type\":\"string\"},\r",
-							"    \"Cur_ID\": {\"type\":\"integer\"},\r",
-							"    \"Cur_Name\" :{\"type\":\"string\"}}, \"required\":[\"Cur_Abbreviation\",\"Cur_ID\",\"Cur_Name\"]}\r",
+							"  \"type\": \"array\",\r",
+							"  \"items\": [\r",
+							"    {\r",
+							"      \"type\": \"object\",\r",
+							"      \"properties\": {\r",
+							"        \"Cur_Abbreviation\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"Cur_ID\": {\r",
+							"          \"type\": \"integer\"\r",
+							"        },\r",
+							"        \"Cur_Name\": {\r",
+							"          \"type\": \"string\"\r",
+							"        }\r",
+							"      },\r",
+							"      \"required\": [\r",
+							"        \"Cur_Abbreviation\",\r",
+							"        \"Cur_ID\",\r",
+							"        \"Cur_Name\"\r",
+							"      ]\r",
+							"    }\r",
+							"  ]\r",
+							"}\r",
 							"    pm.test(\"Check schema\", function(){pm.response.to.have.jsonSchema(schema)})"
 						],
 						"type": "text/javascript"
