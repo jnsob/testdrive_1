@@ -6,122 +6,20 @@
 	},
 	"item": [
 		{
-			"name": "New Folder",
-			"item": [
-				{
-					"name": "New Request",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.sendRequest(\"https://www.nbrb.by/api/exrates/currencies\", function (err, response) {console.log(response.json()); });\r",
-									"let r = JSON.parse(responseBody);\r",
-									" let t = r[23].Cur_ID\r",
-									"pm.environment.set(\"Cur_ID_1\", r[23].Cur_ID); "
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"\r",
-									"// https://www.nbrb.by/api/exrates/currencies"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://www.nbrb.by/api/exrates/currencies",
-							"protocol": "https",
-							"host": [
-								"www",
-								"nbrb",
-								"by"
-							],
-							"path": [
-								"api",
-								"exrates",
-								"currencies"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Rates",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"\r",
-									"let r = JSON.parse(responseBody);\r",
-									" let t = r[23].Cur_ID\r",
-									"pm.environment.set(\"Cur_ID_1\", r[23].Cur_ID);\r",
-									"   pm.sendRequest(\"https://www.nbrb.by/api/exrates/rates/{{Cur_ID_1}}\", function (err, response) {\r",
-									"    //    console.log(response.json());\r",
-									"   // });\r",
-									"//console.log(t)\r",
-									"//}\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://www.nbrb.by/api/exrates/currencies",
-							"protocol": "https",
-							"host": [
-								"www",
-								"nbrb",
-								"by"
-							],
-							"path": [
-								"api",
-								"exrates",
-								"currencies"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Login on server",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Take token\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.environment.set('auth_token', jsonData.token);\r",
-							"});\r",
+							"// pm.test(\"Take token\", function () {\r",
+							"//     var jsonData = pm.response.json();\r",
+							"//     pm.environment.set('auth_token', jsonData.token);\r",
+							"// });\r",
 							"pm.test(\"Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
-							"pm.environment.set(\"name\", s.person.u_name[0]);"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -135,7 +33,7 @@
 					"formdata": [
 						{
 							"key": "login",
-							"value": "jndef9",
+							"value": "jndef0",
 							"type": "text"
 						},
 						{
@@ -143,12 +41,7 @@
 							"value": "qwerty1",
 							"type": "text"
 						}
-					],
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					]
 				},
 				"url": {
 					"raw": "{{url}}login",
@@ -178,8 +71,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							" pm.test('Get token', function() {var jsondata = pm.response.json()\r",
-							"pm.environment.get(\"token\")})\r",
+							"\r",
 							"pm.test(\"Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
@@ -187,59 +79,117 @@
 							"\r",
 							"var jsondata = pm.response.json();\r",
 							"var schema = {  \"type\": \"object\",\r",
-							"  \"properties\": {\r",
-							"    \"person\": {\r",
-							"      \"type\": \"object\",\r",
-							"      \"properties\": {\r",
-							"        \"u_age\": {\r",
-							"          \"type\": \"integer\"\r",
-							"        },\r",
-							"        \"u_name\": {\r",
-							"          \"type\": \"array\",\r",
-							"          \"items\": [\r",
-							"            {\r",
-							"              \"type\": \"string\"\r",
-							"            },\r",
-							"            {\r",
-							"              \"type\": \"integer\"\r",
-							"            },\r",
-							"            {\r",
-							"              \"type\": \"integer\"\r",
-							"            }\r",
-							"          ]\r",
-							"        },\r",
-							"        \"u_salary_1_5_year\": {\r",
-							"          \"type\": \"integer\"\r",
-							"        }\r",
-							"      },\r",
-							"      \"required\": [\r",
-							"        \"u_age\",\r",
-							"        \"u_name\",\r",
-							"        \"u_salary_1_5_year\"\r",
-							"      ]\r",
-							"    },\r",
-							"    \"qa_salary_after_12_months\": {\r",
-							"      \"type\": \"number\"\r",
-							"    },\r",
-							"    \"qa_salary_after_6_months\": {\r",
-							"      \"type\": \"integer\"\r",
-							"    },\r",
-							"    \"start_qa_salary\": {\r",
-							"      \"type\": \"integer\"\r",
-							"    }\r",
-							"  },\r",
-							"  \"required\": [\r",
-							"    \"person\",\r",
-							"    \"qa_salary_after_12_months\",\r",
-							"    \"qa_salary_after_6_months\",\r",
-							"    \"start_qa_salary\"\r",
-							"  ]\r",
-							"}\r",
+							"  \"properties\": {\"person\": {\"type\": \"object\",\r",
+							"      \"properties\": {\"u_age\": {\"type\": \"integer\"},\r",
+							"        \"u_name\": {\"type\": \"array\",\r",
+							"        \"items\": [{\"type\": \"string\"},{\"type\": \"integer\"},{\"type\": \"integer\"}]},\r",
+							"        \"u_salary_1_5_year\": {\"type\": \"integer\"}},\r",
+							"      \"required\": [\"u_age\",\"u_name\", \"u_salary_1_5_year\"]},\r",
+							"    \"qa_salary_after_12_months\": {\"type\": \"number\"},\r",
+							"    \"qa_salary_after_6_months\": {\"type\": \"integer\"},\r",
+							"    \"start_qa_salary\": {\"type\": \"integer\"}},\r",
+							"  \"required\": [\"person\", \"qa_salary_after_12_months\",\"qa_salary_after_6_months\",\"start_qa_salary\"]}\r",
 							"\r",
 							"\r",
 							"pm.test(\"Validate schema\", function () {pm.expect(tv4.validate(jsondata, schema)).to.be.true});\r",
-							"let s = JSON.parse(responseBody);\r",
 							"\r",
+							"let w = pm.response.json();\r",
+							"let s = JSON.parse(request.data);\r",
+							"//pm.environment.set(\"salary\", s.start_qa_salary);\r",
+							"//pm.environment.set(\"u_salary_1_5_year\", w.person.u_salary_1_5_year);\r",
+							"pm.environment.set(\"name\", w.person.u_name[0]);\r",
+							"let s6m = s.salary  * 2;\r",
+							"let s12m = s.salary * 2.9;\r",
+							"let s18m = s.salary * 4;\r",
+							"\r",
+							" pm.test(\"Check value\", function () {\r",
+							"\r",
+							" \r",
+							"    pm.expect(s6m).to.eql(w.qa_salary_after_6_months);\r",
+							"    pm.expect(s12m).to.eql(w.qa_salary_after_12_months);\r",
+							"   pm.expect(s18m).to.eql(w.person.u_salary_1_5_year);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "auth_token",
+						"value": "{{token}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"age\": 22,\r\n  \"salary\": 200,\r\n    \"name\":\"{{name}}\",\r\n    \"auth_token\":\"{{auth_token}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}user_info",
+					"host": [
+						"{{url}}user_info"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add user info -another way",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"var jsondata = pm.response.json();\r",
+							"var schema = {  \"type\": \"object\",\r",
+							"  \"properties\": {\"person\": {\"type\": \"object\",\r",
+							"      \"properties\": {\"u_age\": {\"type\": \"integer\"},\r",
+							"        \"u_name\": {\"type\": \"array\",\r",
+							"        \"items\": [{\"type\": \"string\"},{\"type\": \"integer\"},{\"type\": \"integer\"}]},\r",
+							"        \"u_salary_1_5_year\": {\"type\": \"integer\"}},\r",
+							"      \"required\": [\"u_age\",\"u_name\", \"u_salary_1_5_year\"]},\r",
+							"    \"qa_salary_after_12_months\": {\"type\": \"number\"},\r",
+							"    \"qa_salary_after_6_months\": {\"type\": \"integer\"},\r",
+							"    \"start_qa_salary\": {\"type\": \"integer\"}},\r",
+							"  \"required\": [\"person\", \"qa_salary_after_12_months\",\"qa_salary_after_6_months\",\"start_qa_salary\"]}\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validate schema\", function () {pm.expect(tv4.validate(jsondata, schema)).to.be.true});\r",
+							"\r",
+							"\r",
+							"let s = pm.response.json();\r",
 							"//pm.environment.set(\"salary\", s.start_qa_salary);\r",
 							"pm.environment.set(\"u_salary_1_5_year\", s.person.u_salary_1_5_year);\r",
 							"pm.environment.set(\"name\", s.person.u_name[0]);\r",
@@ -248,7 +198,7 @@
 							"let s18m = s.start_qa_salary * 4;\r",
 							"\r",
 							" pm.test(\"Check value\", function () {\r",
-							"    var s = pm.response.json();\r",
+							"  //  var s = pm.response.json();\r",
 							"    pm.expect(s6m).to.eql(s.qa_salary_after_6_months);\r",
 							"    pm.expect(s12m).to.eql(s.qa_salary_after_12_months);\r",
 							"   pm.expect(s18m).to.eql(pm.environment.get(\"u_salary_1_5_year\", s.u_salary_1_5_year));\r",
@@ -280,7 +230,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"age\": 22,\r\n  \"salary\": 200,\r\n    \"name\":\"Tennard\",\r\n    \"auth_token\":\"{{auth_token}}\"\r\n}",
+					"raw": "{\r\n    \"age\": 22,\r\n  \"salary\": 200,\r\n    \"name\":\"{{name}}\",\r\n    \"auth_token\":\"{{auth_token}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -288,14 +238,15 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}user_info?token={{auth_token}}",
+					"raw": "{{url}}user_info",
 					"host": [
 						"{{url}}user_info"
 					],
 					"query": [
 						{
 							"key": "token",
-							"value": "{{auth_token}}"
+							"value": "{{auth_token}}",
+							"disabled": true
 						}
 					]
 				}
@@ -309,8 +260,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('Get token', function() {var jsondata = pm.response.json()\r",
-							"pm.environment.get(\"{{auth_token}}\")})\r",
+							"\r",
 							"pm.test(\"Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
@@ -426,8 +376,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('Get token', function() {var jsondata = pm.response.json()\r",
-							"pm.environment.get(\"token\")})\r",
+							"\r",
 							"\r",
 							"let jsondata = pm.response.json();\r",
 							"let schema = {\r",
@@ -532,8 +481,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('Get token', function() {var jsondata = pm.response.json()\r",
-							"pm.environment.get(\"token\")});\r",
+							"\r",
 							"pm.test(\"Status code is 200\", function () {pm.response.to.have.status(200)});\r",
 							"\r",
 							"let jsondata =pm.response.json();\r",
@@ -659,8 +607,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test ('Get token', function (){var JsonData = pm.response.json()\r",
-							"pm.environment.get('token')})\r",
+							"\r",
 							"pm.test(\"Check status code\", function(){pm.response.to.have.status(200)});\r",
 							"let zz = JSON.parse(responseBody);\r",
 							"let tt = zz[Math.floor(Math.random() * zz.length)];\r",
@@ -706,41 +653,146 @@
 			"name": "Curr_byn",
 			"event": [
 				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test ('Get token', function (){var JsonData = pm.response.json()})\r",
 							"\r",
 							"pm.test(\"Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
 							"})\r",
 							"\r",
 							"let JsonData = pm.response.json();\r",
-							"let schema = {\r",
-							"  \"type\": \"array\",\r",
-							"  \"items\": [\r",
-							"    {\r",
-							"      \"type\": \"object\",\r",
-							"      \"properties\": {\r",
-							"        \"Cur_Abbreviation\": {\r",
-							"          \"type\": \"string\"\r",
-							"        },\r",
-							"        \"Cur_ID\": {\r",
-							"          \"type\": \"integer\"\r",
-							"        },\r",
-							"        \"Cur_Name\": {\r",
-							"          \"type\": \"string\"\r",
-							"        }\r",
-							"      },\r",
-							"      \"required\": [\r",
-							"        \"Cur_Abbreviation\",\r",
-							"        \"Cur_ID\",\r",
-							"        \"Cur_Name\"\r",
-							"      ]\r",
+							"let schema = {  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"Cur_Abbreviation\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"Cur_ID\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"Cur_Name\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"Cur_OfficialRate\": {\r",
+							"      \"type\": \"number\"\r",
+							"    },\r",
+							"    \"Cur_Scale\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"Date\": {\r",
+							"      \"type\": \"string\"\r",
 							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"Cur_Abbreviation\",\r",
+							"    \"Cur_ID\",\r",
+							"    \"Cur_Name\",\r",
+							"    \"Cur_OfficialRate\",\r",
+							"    \"Cur_Scale\",\r",
+							"    \"Date\"\r",
 							"  ]\r",
 							"}\r",
-							"    pm.test(\"Check schema\", function(){pm.response.to.have.jsonSchema(schema)})"
+							"\r",
+							"    pm.test(\"Check schema\", function(){pm.response.to.have.jsonSchema(schema)})\r",
+							"\r",
+							"    "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{auth_token}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "curr_code",
+							"value": "{{Cur_ID}}",
+							"type": "text"
+						},
+						{
+							"key": "auth_token",
+							"value": "{{auth_token}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}curr_byn",
+					"host": [
+						"{{url}}curr_byn"
+					],
+					"query": [
+						{
+							"key": "auth_token",
+							"value": "{{auth_token}}",
+							"disabled": true
+						},
+						{
+							"key": "Cur_ID",
+							"value": "27",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Curr_byn ПРОБА ПЕРА",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// for (let i = 1; i < 19; i++) \r",
+							"// {pm.environment.set(\"i\", i);\r",
+							"// var options = {\r",
+							"//   'method': 'GET',\r",
+							"//   'url': 'https://www.nbrb.by/api/exrates/currencies/',\r",
+							"//   'headers': {\r",
+							"//   }\r",
+							"// };\r",
+							"// pm.sendRequest(options, function (err, response) {\r",
+							"//     pm.environment.get(\"i\")\r",
+							"//     let E = response.json();\r",
+							"//     let G = E[pm.environment.get(\"i\")].Cur_ID;\r",
+							"//     //console.log(response.json());\r",
+							"//     pm.environment.set(\"G\", G)\r",
+							"// });\r",
+							"// postman.setNextRequest(\"Curr_byn ПРОБА ПЕРА\")\r",
+							"// //postman.setNextRequest(\"Curr_byn ПРОБА ПЕРА\");\r",
+							" if (pm.response.to.have.status(500)) {\r",
+							"       continue\r",
+							"                                      }\r",
+							"\r",
+							" \r",
+							"\r",
+							" else if (pm.response.to.have.status(200)) { if (\r",
+							"  pm.test(\"Body matches string\", function () {\r",
+							"         pm.expect(pm.response.text()).to.include(\"Cur_OfficialRate\");\r",
+							"     })) {console.log(responseBody)};\r",
+							"                                          } \r",
+							"//} //while (let i < 200);\r",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -749,6 +801,88 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
+							"let range = {\r",
+							" from: 1,  to: 3\r",
+							"}\r",
+							"\r",
+							"// // сделаем объект range итерируемым\r",
+							"range[Symbol.iterator] = function() {\r",
+							"\r",
+							" let current = this.from;\r",
+							" let last = this.to;\r",
+							"\r",
+							"return {\r",
+							"  next() {\r",
+							"  if (current <= last) {\r",
+							"  return {\r",
+							" done: false,\r",
+							"           value: current++\r",
+							"         };\r",
+							"       } else {\r",
+							"         return {\r",
+							"          done: true\r",
+							"        };\r",
+							"       }\r",
+							"     }\r",
+							"\r",
+							"  }\r",
+							"};\r",
+							"\r",
+							"for (let num of range) {\r",
+							" pm.environment.set(\"num\", num) // 1, затем 2, 3, 4, 5\r",
+							"var options = {\r",
+							"  'method': 'GET',\r",
+							"  'url': 'https://www.nbrb.by/api/exrates/currencies/',\r",
+							"  'headers': {\r",
+							"  }\r",
+							"};\r",
+							"pm.sendRequest(options, function (err, response) {\r",
+							"    let E = response.json();\r",
+							"    let G = E[pm.environment.get(\"num\")].Cur_ID;\r",
+							"    //console.log(response.json());\r",
+							"    pm.environment.set(\"G\", G)\r",
+							"});\r",
+							"var optionsW = {\r",
+							"  'method': 'POST',\r",
+							"  'url': 'http://168.119.182.98:5002/curr_byn',\r",
+							"  'headers': {\r",
+							"  },\r",
+							"  formData: {\r",
+							"    'curr_code': pm.environment.get(\"G\"),\r",
+							"    'auth_token': '/s34lfgbj/jndef0/jjd909/50324kjkWpqc4578qwerty1434454evny'\r",
+							"  }\r",
+							"};\r",
+							"pm.sendRequest(optionsW, function (err, response) {\r",
+							"    console.log(response.json());\r",
+							"});\r",
+							"\r",
+							"}\r",
+							"\r",
+							" { // выведет 0, затем 1, затем 2\r",
+							" \r",
+							"}\r",
+							"\r",
+							" \r",
+							"  \r",
+							" \r",
+							"\r",
+							"//pm.environment.set(\"iCounter\", 1);\r",
+							"//console.log(yyy);\r",
+							"//  var body = {Cur_ID: \"0\"},\r",
+							"//     var body_str = JSON.stringify(body);\r",
+							"// pm.environment.set('request_body', body_str);\r",
+							"// var usernames = pm.environment.get(\"request_body\");\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"// for (let i = counter; i < 3; counter++) { // выведет 0, затем 1, затем 2\r",
+							"// ;\r",
+							"\r",
+							"// let r = JSON.parse(responseBody);\r",
+							"\r",
+							"\r",
+							"// }\r",
 							""
 						],
 						"type": "text/javascript"
@@ -769,13 +903,13 @@
 					"mode": "formdata",
 					"formdata": [
 						{
-							"key": "Cur_ID",
-							"value": "{{Cur_ID}}",
+							"key": "auth_token",
+							"value": "{{auth_token}}",
 							"type": "text"
 						},
 						{
-							"key": "auth_token",
-							"value": "{{auth_token}}",
+							"key": "curr_code",
+							"value": "{{G}}",
 							"type": "text"
 						}
 					],
@@ -786,14 +920,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}currency",
+					"raw": "{{url}}curr_byn",
 					"host": [
-						"{{url}}currency"
+						"{{url}}curr_byn"
 					],
 					"query": [
 						{
 							"key": "auth_token",
-							"value": "{{auth_token}}",
+							"value": "",
 							"disabled": true
 						}
 					]
@@ -825,7 +959,11 @@
 	"variable": [
 		{
 			"key": "url",
-			"value": "http://116.203.27.46:5002/"
+			"value": "http://168.119.182.98:5002/"
+		},
+		{
+			"key": "iCounter",
+			"value": ""
 		}
 	]
 }
